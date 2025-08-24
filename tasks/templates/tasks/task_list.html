@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="title">My Tasks</h1>
+<a class="button is-primary" href="{% url 'task_create' %}">Add Task</a>
+<table class="table is-fullwidth">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Due</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for task in tasks %}
+        <tr>
+            <td>{{ task.title }}</td>
+            <td>{{ task.get_category_display }}</td>
+            <td>{{ task.due_date|default:'-' }}</td>
+            <td>
+                {% if task.completed %}
+                    <span class="tag is-success">Done</span>
+                {% else %}
+                    <span class="tag is-warning">Pending</span>
+                {% endif %}
+            </td>
+            <td>
+                <a class="button is-small" href="{% url 'task_toggle' task.pk %}">Toggle</a>
+                <a class="button is-small" href="{% url 'task_edit' task.pk %}">Edit</a>
+            </td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="5">No tasks yet.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
